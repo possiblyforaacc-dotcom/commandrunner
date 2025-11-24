@@ -13,10 +13,46 @@ class AbracadabraWebApp {
     }
 
     init() {
+        this.createGalaxyBackground();
         this.setupSocket();
         this.setupKeypad();
         this.setupEventListeners();
         this.loadCommands();
+    }
+
+    createGalaxyBackground() {
+        const starsContainer = document.getElementById('stars');
+
+        // Create regular stars
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = (Math.random() * 3 + 1) + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Create shooting stars
+        setInterval(() => {
+            if (Math.random() < 0.1) { // 10% chance every interval
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.left = Math.random() * 100 + '%';
+                shootingStar.style.top = Math.random() * 50 + '%';
+                shootingStar.style.animationDelay = Math.random() * 10 + 's';
+                starsContainer.appendChild(shootingStar);
+
+                // Remove shooting star after animation
+                setTimeout(() => {
+                    if (shootingStar.parentNode) {
+                        shootingStar.parentNode.removeChild(shootingStar);
+                    }
+                }, 3000);
+            }
+        }, 5000); // Check every 5 seconds
     }
 
     setupSocket() {
