@@ -132,12 +132,19 @@ class AbracadabraWebApp {
         const keys = document.querySelectorAll('.key');
         const enterKey = document.querySelector('.key.enter');
         const clearKey = document.querySelector('.key.clear');
+        const toggleKeyboardBtn = document.getElementById('toggle-keyboard');
+        const useDefaultPwBtn = document.getElementById('use-default-pw');
+
+        let keyboardEnabled = false;
+
+        // Enable text input in password field
+        display.removeAttribute('readonly');
 
         keys.forEach(key => {
             if (!key.classList.contains('enter') && !key.classList.contains('clear')) {
                 key.addEventListener('click', () => {
                     const value = key.dataset.value;
-                    if (display.value.length < 10) { // Limit password length
+                    if (display.value.length < 50) { // Allow longer passwords
                         display.value += value;
                     }
                 });
@@ -152,20 +159,55 @@ class AbracadabraWebApp {
             this.authenticate(display.value);
         });
 
-        // Allow keyboard input
+        // Toggle keyboard input
+        toggleKeyboardBtn.addEventListener('click', () => {
+            keyboardEnabled = !keyboardEnabled;
+            display.focus();
+            toggleKeyboardBtn.textContent = keyboardEnabled ? '⌨️ Text Input Enabled' : '⌨️ Enable Text Input';
+            toggleKeyboardBtn.classList.toggle('active', keyboardEnabled);
+        });
+
+        // Use default password
+        useDefaultPwBtn.addEventListener('click', () => {
+            display.value = 'Himgyiocc1#';
+        });
+
+        // Allow full keyboard input
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('login-screen').classList.contains('active')) {
-                if (e.key >= '0' && e.key <= '9') {
-                    if (display.value.length < 10) {
-                        display.value += e.key;
+                if (keyboardEnabled) {
+                    // Allow all keyboard input when text input is enabled
+                    if (e.key === 'Enter') {
+                        this.authenticate(display.value);
+                    } else if (e.key === 'Escape') {
+                        display.value = '';
+                    } else if (e.key === 'Backspace') {
+                        display.value = display.value.slice(0, -1);
                     }
-                } else if (e.key === 'Backspace') {
-                    display.value = display.value.slice(0, -1);
-                } else if (e.key === 'Enter') {
-                    this.authenticate(display.value);
-                } else if (e.key === 'Escape') {
-                    display.value = '';
+                    // Let the input field handle other keys naturally
+                } else {
+                    // Numpad-only mode
+                    if (e.key >= '0' && e.key <= '9') {
+                        if (display.value.length < 50) {
+                            display.value += e.key;
+                        }
+                    } else if (e.key === 'Backspace') {
+                        display.value = display.value.slice(0, -1);
+                    } else if (e.key === 'Enter') {
+                        this.authenticate(display.value);
+                    } else if (e.key === 'Escape') {
+                        display.value = '';
+                    }
                 }
+            }
+        });
+
+        // Handle input field changes
+        display.addEventListener('input', (e) => {
+            // Allow any input when keyboard is enabled
+            if (!keyboardEnabled) {
+                // In numpad-only mode, only allow numbers
+                display.value = display.value.replace(/[^0-9]/g, '');
             }
         });
     }

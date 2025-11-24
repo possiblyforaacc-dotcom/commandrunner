@@ -18,7 +18,11 @@
 
             <div class="keypad">
                 <div class="display">
-                    <input type="password" id="password-display" readonly>
+                    <input type="password" id="password-display" placeholder="Enter password..." maxlength="50">
+                </div>
+                <div class="input-options">
+                    <button id="toggle-keyboard" class="toggle-btn">⌨️ Enable Text Input</button>
+                    <button id="use-default-pw" class="quick-btn">Use Default Password</button>
                 </div>
                 <div class="keypad-buttons">
                     <button class="key" data-value="1">1</button>

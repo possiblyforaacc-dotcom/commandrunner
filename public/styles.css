@@ -14,7 +14,7 @@ body {
     position: relative;
 }
 
-/* Galaxy Background - Enhanced with Multiple Layers */
+/* Blackhole Void Background */
 body::before {
     content: '';
     position: fixed;
@@ -23,39 +23,29 @@ body::before {
     width: 100%;
     height: 100%;
     background:
-        /* Deep space base */
-        radial-gradient(ellipse at center, rgba(5, 5, 15, 0.95) 0%, rgba(0, 0, 5, 0.98) 70%, rgba(0, 0, 0, 1) 100%),
-        /* Large nebula clouds */
-        radial-gradient(ellipse at 20% 80%, rgba(138, 43, 226, 0.4) 0%, rgba(75, 0, 130, 0.2) 30%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(255, 20, 147, 0.35) 0%, rgba(199, 21, 133, 0.15) 35%, transparent 65%),
-        radial-gradient(ellipse at 40% 40%, rgba(30, 144, 255, 0.3) 0%, rgba(0, 191, 255, 0.15) 40%, transparent 70%),
-        /* Medium nebula swirls */
-        radial-gradient(ellipse at 60% 70%, rgba(255, 105, 180, 0.25) 0%, rgba(255, 20, 147, 0.1) 45%, transparent 75%),
-        radial-gradient(ellipse at 30% 60%, rgba(123, 104, 238, 0.2) 0%, rgba(106, 90, 205, 0.08) 50%, transparent 80%),
-        /* Small accent nebulae */
-        radial-gradient(circle at 70% 50%, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.05) 40%, transparent 70%),
-        radial-gradient(circle at 10% 30%, rgba(50, 205, 50, 0.12) 0%, rgba(34, 139, 34, 0.04) 45%, transparent 75%);
+        /* Pure void base */
+        radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 50%, rgba(5, 5, 15, 0.95) 80%, rgba(0, 0, 0, 1) 100%),
+        /* Event horizon ring */
+        radial-gradient(circle at center, transparent 40%, rgba(20, 0, 40, 0.3) 45%, rgba(50, 0, 20, 0.2) 50%, transparent 55%),
+        /* Accretion disk remnants */
+        conic-gradient(from 0deg at 50% 50%, rgba(100, 0, 50, 0.1) 0deg, transparent 90deg, rgba(50, 0, 100, 0.08) 180deg, transparent 270deg, rgba(100, 50, 0, 0.05) 360deg);
     z-index: -3;
 }
 
-/* Nebula Effects - Enhanced */
+/* Blackhole Core */
 body::after {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
     background:
-        /* Floating nebula particles */
-        radial-gradient(circle at 15% 85%, rgba(186, 85, 211, 0.2) 0%, rgba(138, 43, 226, 0.08) 40%, transparent 70%),
-        radial-gradient(circle at 85% 15%, rgba(255, 182, 193, 0.18) 0%, rgba(255, 20, 147, 0.06) 45%, transparent 75%),
-        radial-gradient(circle at 45% 25%, rgba(135, 206, 235, 0.15) 0%, rgba(70, 130, 180, 0.05) 50%, transparent 80%),
-        /* Cosmic dust particles */
-        radial-gradient(circle at 25% 45%, rgba(255, 228, 196, 0.1) 0%, rgba(255, 218, 185, 0.03) 35%, transparent 65%),
-        radial-gradient(circle at 75% 65%, rgba(221, 160, 221, 0.12) 0%, rgba(186, 85, 211, 0.04) 40%, transparent 70%),
-        radial-gradient(circle at 55% 80%, rgba(176, 196, 222, 0.08) 0%, rgba(119, 136, 153, 0.02) 45%, transparent 75%);
-    animation: nebula-float 25s ease-in-out infinite alternate;
+        radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.9) 30%, rgba(20, 0, 40, 0.4) 60%, transparent 80%),
+        conic-gradient(from 0deg, rgba(100, 0, 100, 0.2), rgba(0, 100, 100, 0.15), rgba(100, 100, 0, 0.1), rgba(100, 0, 100, 0.2));
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: blackhole-core 12s ease-in-out infinite;
     z-index: -2;
 }
 
@@ -100,34 +90,39 @@ body::after {
 
 .star {
     position: absolute;
-    background: white;
+    background: #ffffff;
     border-radius: 50%;
-    animation: twinkle 3s infinite ease-in-out;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+    animation: void-twinkle 4s infinite ease-in-out;
 }
 
 .star:nth-child(odd) {
     animation-delay: -1s;
-    animation-duration: 2s;
+    animation-duration: 3s;
+    background: #ff4444;
+    box-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
 }
 
 .star:nth-child(3n) {
     animation-delay: -2s;
-    animation-duration: 4s;
+    animation-duration: 5s;
+    background: #4444ff;
+    box-shadow: 0 0 5px rgba(68, 68, 255, 0.6);
 }
 
 .star:nth-child(5n) {
-    background: #ffd700;
-    box-shadow: 0 0 6px #ffd700;
+    background: #44ff44;
+    box-shadow: 0 0 4px rgba(68, 255, 68, 0.6);
 }
 
 .star:nth-child(7n) {
-    background: #ff6b6b;
-    box-shadow: 0 0 4px #ff6b6b;
+    background: #ffff44;
+    box-shadow: 0 0 6px rgba(255, 255, 68, 0.6);
 }
 
 .star:nth-child(11n) {
-    background: #4ecdc4;
-    box-shadow: 0 0 5px #4ecdc4;
+    background: #ff44ff;
+    box-shadow: 0 0 5px rgba(255, 68, 255, 0.6);
 }
 
 /* Cosmic dust particles */
@@ -171,14 +166,36 @@ body::after {
 }
 
 /* Animations */
-@keyframes nebula-float {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(-20px) rotate(1deg); }
+@keyframes blackhole-core {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 0.8;
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(1.1) rotate(90deg);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.9) rotate(180deg);
+        opacity: 0.9;
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(1.05) rotate(270deg);
+        opacity: 0.7;
+    }
 }
 
-@keyframes twinkle {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.2); }
+@keyframes void-twinkle {
+    0%, 100% {
+        opacity: 0.2;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.3);
+        filter: blur(1px);
+    }
 }
 
 @keyframes shooting {
@@ -242,6 +259,35 @@ body::after {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.input-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.toggle-btn, .quick-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.toggle-btn:hover, .quick-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.toggle-btn.active {
+    background: rgba(0, 123, 255, 0.3);
+    border-color: rgba(0, 123, 255, 0.5);
+    color: #007bff;
 }
 
 .display {
