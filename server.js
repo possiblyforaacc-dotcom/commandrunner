@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const WebSocket = require('ws');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -14,6 +15,9 @@ const io = socketIo(server, {
         methods: ["GET", "POST"]
     }
 });
+
+// WebSocket server for Minecraft plugin connections
+const wss = new WebSocket.Server({ server });
 
 // Security middleware
 app.use(helmet());
@@ -123,12 +127,90 @@ io.on('connection', (socket) => {
     });
 });
 
+// WebSocket connection handling for Minecraft plugin
+wss.on('connection', (ws) => {
+    console.log('Minecraft plugin connected via WebSocket');
+
+    ws.on('message', (message) => {
+        try {
+            const data = JSON.parse(message.toString());
+            console.log('Received from Minecraft plugin:', data.type);
+
+            switch (data.type) {
+                case 'minecraft-connect':
+                    const { serverId, serverName } = data;
+                    connectedServers.set(serverId, {
+                        socket: ws,
+                        serverName: serverName,
+                        connectedAt: new Date(),
+                        players: [],
+                        isWebSocket: true
+                    });
+                    console.log(`Minecraft server connected: ${serverName} (${serverId})`);
+
+                    // Broadcast server connection to web clients
+                    io.emit('server-connected', {
+                        serverId,
+                        serverName,
+                        connectedAt: new Date()
+                    });
+                    break;
+
+                case 'player-update':
+                    const { serverId: playerServerId, players } = data;
+                    if (connectedServers.has(playerServerId)) {
+                        connectedServers.get(playerServerId).players = players;
+
+                        // Broadcast to authenticated web clients
+                        io.emit('players-updated', {
+                            serverId: playerServerId,
+                            players
+                        });
+                    }
+                    break;
+
+                case 'command-response':
+                    const { sessionId, response, success } = data;
+                    io.emit('command-result', {
+                        sessionId,
+                        response,
+                        success,
+                        timestamp: new Date()
+                    });
+                    break;
+            }
+        } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('Minecraft plugin disconnected');
+
+        // Remove from connected servers
+        for (const [serverId, serverData] of connectedServers.entries()) {
+            if (serverData.socket === ws) {
+                connectedServers.delete(serverId);
+                console.log(`Minecraft server disconnected: ${serverData.serverName}`);
+
+                // Notify web clients
+                io.emit('server-disconnected', { serverId });
+                break;
+            }
+        }
+    });
+
+    ws.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+});
+
 // Authentication endpoint
 app.post('/api/authenticate', (req, res) => {
     const { password } = req.body;
 
     // Simple password check (in production, use proper authentication)
-    const correctPassword = process.env.ADMIN_PASSWORD || '1234';
+    const correctPassword = process.env.ADMIN_PASSWORD || '252622';
 
     if (password === correctPassword) {
         const sessionId = generateSessionId();
@@ -188,13 +270,22 @@ app.post('/api/command', (req, res) => {
 
     // Send command to Minecraft server
     if (connectedServers.has(serverId)) {
-        const serverSocket = connectedServers.get(serverId).socket;
-        serverSocket.emit('web-command', {
+        const serverData = connectedServers.get(serverId);
+        const message = {
+            type: 'web-command',
             sessionId,
             command,
             params,
             timestamp: new Date()
-        });
+        };
+
+        if (serverData.isWebSocket) {
+            // Send via WebSocket
+            serverData.socket.send(JSON.stringify(message));
+        } else {
+            // Send via Socket.IO
+            serverData.socket.emit('web-command', message);
+        }
 
         res.json({ success: true, message: 'Command sent' });
     } else {
@@ -213,13 +304,22 @@ app.post('/api/select-player', (req, res) => {
 
     // Send select command to Minecraft server
     if (connectedServers.has(serverId)) {
-        const serverSocket = connectedServers.get(serverId).socket;
-        serverSocket.emit('web-command', {
+        const serverData = connectedServers.get(serverId);
+        const message = {
+            type: 'web-command',
             sessionId,
             command: 'select-player',
             params: { playerName },
             timestamp: new Date()
-        });
+        };
+
+        if (serverData.isWebSocket) {
+            // Send via WebSocket
+            serverData.socket.send(JSON.stringify(message));
+        } else {
+            // Send via Socket.IO
+            serverData.socket.emit('web-command', message);
+        }
 
         res.json({ success: true, message: `Selected player: ${playerName}` });
     } else {
