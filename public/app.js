@@ -182,6 +182,62 @@ class AbracadabraWebApp {
             this.selectPlayer('self');
         });
 
+        // Refresh players button
+        document.getElementById('refresh-players-btn').addEventListener('click', () => {
+            if (this.selectedServer) {
+                this.loadPlayers(this.selectedServer);
+            }
+        });
+
+        // Quick action buttons
+        document.getElementById('heal-target-btn').addEventListener('click', () => {
+            if (this.selectedPlayer && this.selectedPlayer !== 'self') {
+                this.executeCommand('heal-player', {});
+            } else {
+                this.showConsoleMessage('Please select a target player first', 'warning');
+            }
+        });
+
+        document.getElementById('feed-target-btn').addEventListener('click', () => {
+            if (this.selectedPlayer && this.selectedPlayer !== 'self') {
+                this.executeCommand('feed-player', {});
+            } else {
+                this.showConsoleMessage('Please select a target player first', 'warning');
+            }
+        });
+
+        document.getElementById('tp-to-target-btn').addEventListener('click', () => {
+            if (this.selectedPlayer && this.selectedPlayer !== 'self') {
+                this.executeCommand('tp-to-player', {});
+            } else {
+                this.showConsoleMessage('Please select a target player first', 'warning');
+            }
+        });
+
+        document.getElementById('smite-target-btn').addEventListener('click', () => {
+            if (this.selectedPlayer && this.selectedPlayer !== 'self') {
+                this.executeCommand('strike-lightning', {});
+            } else {
+                this.showConsoleMessage('Please select a target player first', 'warning');
+            }
+        });
+
+        document.getElementById('kick-target-btn').addEventListener('click', () => {
+            if (this.selectedPlayer && this.selectedPlayer !== 'self') {
+                this.executeCommand('kick-player', {});
+            } else {
+                this.showConsoleMessage('Please select a target player first', 'warning');
+            }
+        });
+
+        document.getElementById('ban-target-btn').addEventListener('click', () => {
+            if (this.selectedPlayer && this.selectedPlayer !== 'self') {
+                this.executeCommand('ban-player', {});
+            } else {
+                this.showConsoleMessage('Please select a target player first', 'warning');
+            }
+        });
+
         // Category tabs
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -423,7 +479,21 @@ class AbracadabraWebApp {
                 { id: 'creative-mode', name: 'Creative Mode', icon: '🎨', desc: 'Creative tools' },
                 { id: 'fun-commands', name: 'Fun Commands', icon: '🎉', desc: 'Fun effects' },
                 { id: 'troll-tools', name: 'Troll Tools', icon: '😈', desc: 'Trolling commands' },
-                { id: 'technical', name: 'Technical', icon: '⚙️', desc: 'Technical tools' }
+                { id: 'technical', name: 'Technical', icon: '⚙️', desc: 'Technical tools' },
+                { id: 'combat-tools', name: 'Combat Tools', icon: '⚔️', desc: 'Weapons and armor' },
+                { id: 'economy', name: 'Economy', icon: '💰', desc: 'Money and trading' },
+                { id: 'events', name: 'Events', icon: '🎊', desc: 'Events and minigames' },
+                { id: 'security', name: 'Security', icon: '🛡️', desc: 'Anti-cheat and bans' },
+                { id: 'utility', name: 'Utility', icon: '🔧', desc: 'General utilities' },
+                { id: 'teleportation', name: 'Teleportation', icon: '✈️', desc: 'Advanced teleportation' },
+                { id: 'effects', name: 'Potion Effects', icon: '🧪', desc: 'Potion effect management' },
+                { id: 'advanced', name: 'Advanced Tools', icon: '🔬', desc: 'Powerful utilities' },
+                { id: 'moderation', name: 'Moderation', icon: '👮', desc: 'Player moderation' },
+                { id: 'performance', name: 'Performance', icon: '⚡', desc: 'Server optimization' },
+                { id: 'op-tools', name: 'OP Tools', icon: '🔨', desc: 'Infinite durability tools' },
+                { id: 'destroy-items', name: 'Destroy Items', icon: '💥', desc: 'Delete items' },
+                { id: 'inventory-viewer', name: 'Inventory Viewer', icon: '👀', desc: 'View player inventories' },
+                { id: 'inventory-destroyer', name: 'Inventory Destroyer', icon: '💣', desc: 'Delete player items' }
             ],
             'dupe-items': [
                 { id: 'dupe-stack', name: 'Dupe Stack', icon: '📦', desc: 'Duplicate held item stack' },
@@ -517,7 +587,126 @@ class AbracadabraWebApp {
                 { id: 'view-inventory', name: 'View Inventory', icon: '👀', desc: 'View target player inventory' },
                 { id: 'player-stats', name: 'Player Stats', icon: '📊', desc: 'View player statistics' },
                 { id: 'server-info', name: 'Server Info', icon: 'ℹ️', desc: 'View server information' },
-                { id: 'plugin-list', name: 'Plugin List', icon: '📋', desc: 'List installed plugins' }
+                { id: 'plugin-list', name: 'Plugin List', icon: '📋', desc: 'List installed plugins' },
+                { id: 'debug-console', name: 'Debug Console', icon: '🔧', desc: 'Server debugging info' },
+                { id: 'code-generator', name: 'Code Generator', icon: '💻', desc: 'Generate code templates' },
+                { id: 'performance-monitor', name: 'Performance Monitor', icon: '📈', desc: 'Monitor server performance' },
+                { id: 'log-analyzer', name: 'Log Analyzer', icon: '📝', desc: 'Analyze server logs' }
+            ],
+            'combat-tools': [
+                { id: 'spawn-netherite-sword', name: 'Netherite Sword', icon: '⚔️', desc: 'Spawn netherite sword' },
+                { id: 'spawn-netherite-armor', name: 'Netherite Armor', icon: '🛡️', desc: 'Spawn full netherite armor set' },
+                { id: 'spawn-diamond-sword', name: 'Diamond Sword', icon: '💎', desc: 'Spawn diamond sword' },
+                { id: 'spawn-diamond-armor', name: 'Diamond Armor', icon: '💎', desc: 'Spawn full diamond armor set' },
+                { id: 'spawn-bow', name: 'Bow', icon: '🏹', desc: 'Spawn bow with power enchantment' },
+                { id: 'spawn-crossbow', name: 'Crossbow', icon: '🏹', desc: 'Spawn crossbow with enchantments' },
+                { id: 'spawn-shield', name: 'Shield', icon: '🛡️', desc: 'Spawn shield' },
+                { id: 'spawn-totem', name: 'Totem of Undying', icon: '🗿', desc: 'Spawn totem of undying' }
+            ],
+            economy: [
+                { id: 'give-money', name: 'Give Money', icon: '💰', desc: 'Give money to player', amount: true },
+                { id: 'take-money', name: 'Take Money', icon: '💸', desc: 'Take money from player', amount: true },
+                { id: 'set-balance', name: 'Set Balance', icon: '🏦', desc: 'Set player balance', amount: true },
+                { id: 'clear-balance', name: 'Clear Balance', icon: '🗑️', desc: 'Reset player balance to 0' },
+                { id: 'view-balance', name: 'View Balance', icon: '👀', desc: 'Check player balance' },
+                { id: 'create-shop', name: 'Create Shop', icon: '🏪', desc: 'Create a shop' },
+                { id: 'delete-shop', name: 'Delete Shop', icon: '💥', desc: 'Delete a shop' }
+            ],
+            events: [
+                { id: 'start-event', name: 'Start Event', icon: '🎪', desc: 'Start a server event' },
+                { id: 'stop-event', name: 'Stop Event', icon: '⏹️', desc: 'Stop current event' },
+                { id: 'create-minigame', name: 'Create Minigame', icon: '🎮', desc: 'Create a minigame' },
+                { id: 'start-minigame', name: 'Start Minigame', icon: '▶️', desc: 'Start a minigame' },
+                { id: 'stop-minigame', name: 'Stop Minigame', icon: '⏹️', desc: 'Stop current minigame' },
+                { id: 'announce-event', name: 'Announce Event', icon: '📢', desc: 'Announce an event to all players' }
+            ],
+            security: [
+                { id: 'ban-player', name: 'Ban Player', icon: '🚫', desc: 'Ban a player' },
+                { id: 'unban-player', name: 'Unban Player', icon: '✅', desc: 'Unban a player' },
+                { id: 'kick-player', name: 'Kick Player', icon: '👢', desc: 'Kick a player' },
+                { id: 'mute-player', name: 'Mute Player', icon: '🤐', desc: 'Mute a player' },
+                { id: 'unmute-player', name: 'Unmute Player', icon: '🗣️', desc: 'Unmute a player' },
+                { id: 'check-bans', name: 'Check Bans', icon: '📋', desc: 'View banned players' },
+                { id: 'ip-ban', name: 'IP Ban', icon: '🌐', desc: 'Ban by IP address' }
+            ],
+            utility: [
+                { id: 'heal-all', name: 'Heal All', icon: '❤️', desc: 'Heal all players' },
+                { id: 'feed-all', name: 'Feed All', icon: '🍖', desc: 'Feed all players' },
+                { id: 'clear-all-effects', name: 'Clear All Effects', icon: '🧹', desc: 'Clear effects from all players' },
+                { id: 'repair-items', name: 'Repair Items', icon: '🔧', desc: 'Repair held item' },
+                { id: 'enchant-item', name: 'Enchant Item', icon: '✨', desc: 'Enchant held item' },
+                { id: 'give-xp', name: 'Give XP', icon: '⭐', desc: 'Give experience levels', amount: true }
+            ],
+            teleportation: [
+                { id: 'tp-to-player', name: 'TP to Player', icon: '👤', desc: 'Teleport to a player' },
+                { id: 'tp-player-here', name: 'TP Player Here', icon: '📍', desc: 'Teleport player to you' },
+                { id: 'tp-all-here', name: 'TP All Here', icon: '👥', desc: 'Teleport all players to you' },
+                { id: 'tp-random', name: 'Random TP', icon: '🎲', desc: 'Teleport randomly' },
+                { id: 'tp-coordinates', name: 'TP to Coordinates', icon: '📍', desc: 'Teleport to specific coordinates' },
+                { id: 'set-home', name: 'Set Home', icon: '🏠', desc: 'Set home location' },
+                { id: 'tp-home', name: 'TP Home', icon: '🏠', desc: 'Teleport to home' }
+            ],
+            effects: [
+                { id: 'give-regeneration', name: 'Regeneration', icon: '❤️', desc: 'Give regeneration effect' },
+                { id: 'give-invisibility', name: 'Invisibility', icon: '👻', desc: 'Give invisibility effect' },
+                { id: 'give-night-vision', name: 'Night Vision', icon: '👁️', desc: 'Give night vision effect' },
+                { id: 'give-speed', name: 'Speed', icon: '💨', desc: 'Give speed effect' },
+                { id: 'give-strength', name: 'Strength', icon: '💪', desc: 'Give strength effect' },
+                { id: 'give-jump-boost', name: 'Jump Boost', icon: '🦘', desc: 'Give jump boost effect' },
+                { id: 'clear-effects', name: 'Clear Effects', icon: '🧹', desc: 'Clear all potion effects' }
+            ],
+            advanced: [
+                { id: 'execute-command', name: 'Execute Command', icon: '💻', desc: 'Execute custom command' },
+                { id: 'world-edit', name: 'World Edit', icon: '🌍', desc: 'Advanced world editing' },
+                { id: 'structure-gen', name: 'Structure Gen', icon: '🏗️', desc: 'Generate structures' },
+                { id: 'debug-mode', name: 'Debug Mode', icon: '🔧', desc: 'Toggle debug mode' },
+                { id: 'recipe-unlock', name: 'Recipe Unlock', icon: '📖', desc: 'Unlock recipes' },
+                { id: 'op-mode', name: 'OP Mode', icon: '👑', desc: 'Toggle OP mode' },
+                { id: 'god-mode-all', name: 'God Mode All', icon: '🛡️', desc: 'God mode for all players' }
+            ],
+            moderation: [
+                { id: 'kick-all', name: 'Kick All', icon: '👢', desc: 'Kick all players' },
+                { id: 'ban-all', name: 'Ban All', icon: '🚫', desc: 'Ban all players (except you)' },
+                { id: 'mute-chat', name: 'Mute Chat', icon: '🤐', desc: 'Mute global chat' },
+                { id: 'freeze-players', name: 'Freeze Players', icon: '🧊', desc: 'Freeze all players' },
+                { id: 'unfreeze-players', name: 'Unfreeze Players', icon: '🔥', desc: 'Unfreeze all players' },
+                { id: 'player-list', name: 'Player List', icon: '📋', desc: 'List all online players' },
+                { id: 'toggle-pvp', name: 'Toggle PvP', icon: '⚔️', desc: 'Toggle PvP globally' }
+            ],
+            performance: [
+                { id: 'clear-lag', name: 'Clear Lag', icon: '🧹', desc: 'Clear dropped items' },
+                { id: 'garbage-collect', name: 'Garbage Collect', icon: '🗑️', desc: 'Force garbage collection' },
+                { id: 'entity-count', name: 'Entity Count', icon: '🔢', desc: 'Count entities' },
+                { id: 'tps-monitor', name: 'TPS Monitor', icon: '📊', desc: 'Monitor server TPS' },
+                { id: 'chunk-unload', name: 'Chunk Unload', icon: '📦', desc: 'Unload unused chunks' },
+                { id: 'memory-info', name: 'Memory Info', icon: '💾', desc: 'Show memory usage' }
+            ],
+            'op-tools': [
+                { id: 'infinite-pickaxe', name: 'Infinite Pickaxe', icon: '⛏️', desc: 'Unbreakable netherite pickaxe' },
+                { id: 'infinite-sword', name: 'Infinite Sword', icon: '⚔️', desc: 'Unbreakable netherite sword' },
+                { id: 'infinite-axe', name: 'Infinite Axe', icon: '🪓', desc: 'Unbreakable netherite axe' },
+                { id: 'infinite-shovel', name: 'Infinite Shovel', icon: '⛏️', desc: 'Unbreakable netherite shovel' },
+                { id: 'infinite-hoe', name: 'Infinite Hoe', icon: '🌾', desc: 'Unbreakable netherite hoe' },
+                { id: 'infinite-bow', name: 'Infinite Bow', icon: '🏹', desc: 'Unbreakable bow with infinity' },
+                { id: 'infinite-crossbow', name: 'Infinite Crossbow', icon: '🏹', desc: 'Unbreakable crossbow' }
+            ],
+            'destroy-items': [
+                { id: 'destroy-held', name: 'Destroy Held Item', icon: '💥', desc: 'Destroy item in hand' },
+                { id: 'destroy-armor', name: 'Destroy Armor', icon: '💥', desc: 'Destroy armor pieces' },
+                { id: 'destroy-inventory', name: 'Destroy Inventory', icon: '💥', desc: 'Clear entire inventory' },
+                { id: 'destroy-hotbar', name: 'Destroy Hotbar', icon: '💥', desc: 'Clear hotbar items' }
+            ],
+            'inventory-viewer': [
+                { id: 'view-inventory', name: 'View Inventory', icon: '👀', desc: 'View target player inventory' },
+                { id: 'view-armor', name: 'View Armor', icon: '🛡️', desc: 'View target player armor' },
+                { id: 'view-enderchest', name: 'View Enderchest', icon: '📦', desc: 'View target enderchest' },
+                { id: 'copy-inventory', name: 'Copy Inventory', icon: '📋', desc: 'Copy items from target' }
+            ],
+            'inventory-destroyer': [
+                { id: 'destroy-player-inventory', name: 'Destroy Player Items', icon: '💣', desc: 'Clear target inventory' },
+                { id: 'destroy-player-armor', name: 'Destroy Player Armor', icon: '💣', desc: 'Remove target armor' },
+                { id: 'destroy-player-enderchest', name: 'Destroy Enderchest', icon: '💣', desc: 'Clear target enderchest' },
+                { id: 'selective-destroy', name: 'Selective Destroy', icon: '🎯', desc: 'Destroy specific items' }
             ]
         };
 

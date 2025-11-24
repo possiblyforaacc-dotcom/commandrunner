@@ -58,10 +58,21 @@
                     <h3>🎯 Target Player</h3>
                     <div id="current-target">None selected</div>
                     <button id="select-self-btn">Select Self</button>
+                    <button id="refresh-players-btn">🔄 Refresh Players</button>
 
                     <h3>👥 Online Players</h3>
                     <div id="player-list" class="player-list">
                         <div class="loading">Loading players...</div>
+                    </div>
+
+                    <h3>🎮 Quick Player Actions</h3>
+                    <div class="quick-actions">
+                        <button id="heal-target-btn" class="quick-btn">❤️ Heal Target</button>
+                        <button id="feed-target-btn" class="quick-btn">🍖 Feed Target</button>
+                        <button id="tp-to-target-btn" class="quick-btn">📍 TP to Target</button>
+                        <button id="smite-target-btn" class="quick-btn">⚡ Smite Target</button>
+                        <button id="kick-target-btn" class="quick-btn">👢 Kick Target</button>
+                        <button id="ban-target-btn" class="quick-btn">🚫 Ban Target</button>
                     </div>
                 </div>
             </div>
@@ -82,6 +93,20 @@
                     <button class="tab" data-category="fun">Fun Commands</button>
                     <button class="tab" data-category="troll">Troll Tools</button>
                     <button class="tab" data-category="technical">Technical</button>
+                    <button class="tab" data-category="combat-tools">Combat Tools</button>
+                    <button class="tab" data-category="economy">Economy</button>
+                    <button class="tab" data-category="events">Events</button>
+                    <button class="tab" data-category="security">Security</button>
+                    <button class="tab" data-category="utility">Utility</button>
+                    <button class="tab" data-category="teleportation">Teleportation</button>
+                    <button class="tab" data-category="effects">Potion Effects</button>
+                    <button class="tab" data-category="advanced">Advanced Tools</button>
+                    <button class="tab" data-category="moderation">Moderation</button>
+                    <button class="tab" data-category="performance">Performance</button>
+                    <button class="tab" data-category="op-tools">OP Tools</button>
+                    <button class="tab" data-category="destroy-items">Destroy Items</button>
+                    <button class="tab" data-category="inventory-viewer">Inventory Viewer</button>
+                    <button class="tab" data-category="inventory-destroyer">Inventory Destroyer</button>
                 </div>
 
                 <div class="command-grid" id="command-grid">
