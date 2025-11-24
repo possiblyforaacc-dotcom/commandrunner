@@ -13,78 +13,10 @@ class AbracadabraWebApp {
     }
 
     init() {
-        this.createGalaxyBackground();
         this.setupSocket();
         this.setupKeypad();
         this.setupEventListeners();
         this.loadCommands();
-    }
-
-    createGalaxyBackground() {
-        const starsContainer = document.getElementById('stars');
-
-        // Create many more stars for richer detail
-        for (let i = 0; i < 800; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-
-            // Random positioning
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-
-            // Varied sizes (tiny to medium)
-            const size = Math.random() * 4 + 0.5; // 0.5px to 4.5px
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-
-            // Random animation delays for natural twinkling
-            star.style.animationDelay = Math.random() * 5 + 's';
-
-            // Add some stars with different animation durations
-            if (Math.random() < 0.3) {
-                star.style.animationDuration = (Math.random() * 2 + 2) + 's'; // 2-4 seconds
-            }
-
-            starsContainer.appendChild(star);
-        }
-
-        // Create more frequent shooting stars
-        setInterval(() => {
-            if (Math.random() < 0.15) { // 15% chance every interval
-                const shootingStar = document.createElement('div');
-                shootingStar.className = 'shooting-star';
-                shootingStar.style.left = Math.random() * 100 + '%';
-                shootingStar.style.top = Math.random() * 60 + '%'; // Higher chance in upper area
-                shootingStar.style.animationDelay = Math.random() * 5 + 's';
-
-                // Varied shooting star sizes
-                const starSize = Math.random() * 2 + 1; // 1-3px
-                shootingStar.style.width = starSize + 'px';
-                shootingStar.style.height = starSize + 'px';
-
-                starsContainer.appendChild(shootingStar);
-
-                // Remove shooting star after animation
-                setTimeout(() => {
-                    if (shootingStar.parentNode) {
-                        shootingStar.parentNode.removeChild(shootingStar);
-                    }
-                }, 4000);
-            }
-        }, 3000); // Check every 3 seconds for more frequent shooting stars
-
-        // Create cosmic dust particles
-        for (let i = 0; i < 50; i++) {
-            const dust = document.createElement('div');
-            dust.className = 'cosmic-dust';
-            dust.style.left = Math.random() * 100 + '%';
-            dust.style.top = Math.random() * 100 + '%';
-            dust.style.width = (Math.random() * 2 + 1) + 'px';
-            dust.style.height = dust.style.width;
-            dust.style.animationDelay = Math.random() * 10 + 's';
-            dust.style.animationDuration = (Math.random() * 20 + 20) + 's'; // 20-40 seconds
-            starsContainer.appendChild(dust);
-        }
     }
 
     setupSocket() {
@@ -128,88 +60,23 @@ class AbracadabraWebApp {
     }
 
     setupKeypad() {
-        const display = document.getElementById('password-display');
-        const keys = document.querySelectorAll('.key');
-        const enterKey = document.querySelector('.key.enter');
-        const clearKey = document.querySelector('.key.clear');
-        const toggleKeyboardBtn = document.getElementById('toggle-keyboard');
-        const useDefaultPwBtn = document.getElementById('use-default-pw');
+        const passwordInput = document.getElementById('password-input');
+        const loginBtn = document.getElementById('login-btn');
 
-        let keyboardEnabled = false;
+        // Handle login button click
+        loginBtn.addEventListener('click', () => {
+            this.authenticate(passwordInput.value);
+        });
 
-        // Enable text input in password field
-        display.removeAttribute('readonly');
-
-        keys.forEach(key => {
-            if (!key.classList.contains('enter') && !key.classList.contains('clear')) {
-                key.addEventListener('click', () => {
-                    const value = key.dataset.value;
-                    if (display.value.length < 50) { // Allow longer passwords
-                        display.value += value;
-                    }
-                });
+        // Handle Enter key press
+        passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                this.authenticate(passwordInput.value);
             }
         });
 
-        clearKey.addEventListener('click', () => {
-            display.value = '';
-        });
-
-        enterKey.addEventListener('click', () => {
-            this.authenticate(display.value);
-        });
-
-        // Toggle keyboard input
-        toggleKeyboardBtn.addEventListener('click', () => {
-            keyboardEnabled = !keyboardEnabled;
-            display.focus();
-            toggleKeyboardBtn.textContent = keyboardEnabled ? '⌨️ Text Input Enabled' : '⌨️ Enable Text Input';
-            toggleKeyboardBtn.classList.toggle('active', keyboardEnabled);
-        });
-
-        // Use default password
-        useDefaultPwBtn.addEventListener('click', () => {
-            display.value = 'Himgyiocc1#';
-        });
-
-        // Allow full keyboard input
-        document.addEventListener('keydown', (e) => {
-            if (document.getElementById('login-screen').classList.contains('active')) {
-                if (keyboardEnabled) {
-                    // Allow all keyboard input when text input is enabled
-                    if (e.key === 'Enter') {
-                        this.authenticate(display.value);
-                    } else if (e.key === 'Escape') {
-                        display.value = '';
-                    } else if (e.key === 'Backspace') {
-                        display.value = display.value.slice(0, -1);
-                    }
-                    // Let the input field handle other keys naturally
-                } else {
-                    // Numpad-only mode
-                    if (e.key >= '0' && e.key <= '9') {
-                        if (display.value.length < 50) {
-                            display.value += e.key;
-                        }
-                    } else if (e.key === 'Backspace') {
-                        display.value = display.value.slice(0, -1);
-                    } else if (e.key === 'Enter') {
-                        this.authenticate(display.value);
-                    } else if (e.key === 'Escape') {
-                        display.value = '';
-                    }
-                }
-            }
-        });
-
-        // Handle input field changes
-        display.addEventListener('input', (e) => {
-            // Allow any input when keyboard is enabled
-            if (!keyboardEnabled) {
-                // In numpad-only mode, only allow numbers
-                display.value = display.value.replace(/[^0-9]/g, '');
-            }
-        });
+        // Focus input on load
+        passwordInput.focus();
     }
 
     setupEventListeners() {

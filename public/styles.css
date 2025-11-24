@@ -1,4 +1,4 @@
-/* Abracadabra Web Admin Panel Styles */
+/* Simple Abracadabra Web Admin Panel Styles */
 
 * {
     margin: 0;
@@ -7,162 +7,13 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
     color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
     min-height: 100vh;
     overflow-x: hidden;
-    position: relative;
-}
-
-/* Blackhole Void Background */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        /* Pure void base */
-        radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 50%, rgba(5, 5, 15, 0.95) 80%, rgba(0, 0, 0, 1) 100%),
-        /* Event horizon ring */
-        radial-gradient(circle at center, transparent 40%, rgba(20, 0, 40, 0.3) 45%, rgba(50, 0, 20, 0.2) 50%, transparent 55%),
-        /* Accretion disk remnants */
-        conic-gradient(from 0deg at 50% 50%, rgba(100, 0, 50, 0.1) 0deg, transparent 90deg, rgba(50, 0, 100, 0.08) 180deg, transparent 270deg, rgba(100, 50, 0, 0.05) 360deg);
-    z-index: -3;
-}
-
-/* Blackhole Core */
-body::after {
-    content: '';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    background:
-        radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.9) 30%, rgba(20, 0, 40, 0.4) 60%, transparent 80%),
-        conic-gradient(from 0deg, rgba(100, 0, 100, 0.2), rgba(0, 100, 100, 0.15), rgba(100, 100, 0, 0.1), rgba(100, 0, 100, 0.2));
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: blackhole-core 12s ease-in-out infinite;
-    z-index: -2;
-}
-
-/* Additional cosmic layers */
-.cosmic-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.cosmic-layer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        /* Spiral galaxy arms */
-        conic-gradient(from 0deg at 50% 50%, rgba(255, 215, 0, 0.05) 0deg, transparent 45deg, rgba(138, 43, 226, 0.03) 90deg, transparent 135deg, rgba(255, 20, 147, 0.04) 180deg, transparent 225deg, rgba(30, 144, 255, 0.02) 270deg, transparent 315deg),
-        /* Star clusters */
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 20%),
-        radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.06) 0%, transparent 18%),
-        radial-gradient(circle at 60% 30%, rgba(255, 20, 147, 0.05) 0%, transparent 15%);
-    animation: galaxy-rotate 60s linear infinite;
-}
-
-/* Stars Layer */
-.stars {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.star {
-    position: absolute;
-    background: #ffffff;
-    border-radius: 50%;
-    box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
-    animation: void-twinkle 4s infinite ease-in-out;
-}
-
-.star:nth-child(odd) {
-    animation-delay: -1s;
-    animation-duration: 3s;
-    background: #ff4444;
-    box-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
-}
-
-.star:nth-child(3n) {
-    animation-delay: -2s;
-    animation-duration: 5s;
-    background: #4444ff;
-    box-shadow: 0 0 5px rgba(68, 68, 255, 0.6);
-}
-
-.star:nth-child(5n) {
-    background: #44ff44;
-    box-shadow: 0 0 4px rgba(68, 255, 68, 0.6);
-}
-
-.star:nth-child(7n) {
-    background: #ffff44;
-    box-shadow: 0 0 6px rgba(255, 255, 68, 0.6);
-}
-
-.star:nth-child(11n) {
-    background: #ff44ff;
-    box-shadow: 0 0 5px rgba(255, 68, 255, 0.6);
-}
-
-/* Cosmic dust particles */
-.cosmic-dust {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    animation: cosmic-drift 30s ease-in-out infinite;
-}
-
-.cosmic-dust:nth-child(odd) {
-    background: rgba(138, 43, 226, 0.08);
-    animation-duration: 25s;
-}
-
-.cosmic-dust:nth-child(3n) {
-    background: rgba(255, 20, 147, 0.06);
-    animation-duration: 35s;
-}
-
-/* Shooting Stars */
-.shooting-star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: white;
-    border-radius: 50%;
-    animation: shooting 3s linear infinite;
-}
-
-.shooting-star::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, white, transparent);
-    transform: rotate(45deg);
-    transform-origin: 0 0;
 }
 
 /* Animations */
@@ -252,42 +103,60 @@ body::after {
     opacity: 0.8;
 }
 
-.keypad {
+.login-form {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 30px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
 }
 
-.input-options {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-}
-
-.toggle-btn, .quick-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+#password-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
     color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+#password-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}
+
+#password-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+#login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
-.toggle-btn:hover, .quick-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+#login-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
 }
 
-.toggle-btn.active {
-    background: rgba(0, 123, 255, 0.3);
-    border-color: rgba(0, 123, 255, 0.5);
-    color: #007bff;
+#login-btn:active {
+    transform: translateY(0);
 }
 
 .display {

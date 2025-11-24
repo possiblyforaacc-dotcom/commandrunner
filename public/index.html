@@ -8,36 +8,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
 </head>
 <body>
-  <!-- Galaxy Background Effects -->
-  <div class="cosmic-layer"></div>
-  <div class="stars" id="stars"></div>
     <div id="login-screen" class="screen active">
         <div class="login-container">
             <h1>🔮 Abracadabra</h1>
             <p>Admin Panel Access</p>
 
-            <div class="keypad">
-                <div class="display">
-                    <input type="password" id="password-display" placeholder="Enter password..." maxlength="50">
-                </div>
-                <div class="input-options">
-                    <button id="toggle-keyboard" class="toggle-btn">⌨️ Enable Text Input</button>
-                    <button id="use-default-pw" class="quick-btn">Use Default Password</button>
-                </div>
-                <div class="keypad-buttons">
-                    <button class="key" data-value="1">1</button>
-                    <button class="key" data-value="2">2</button>
-                    <button class="key" data-value="3">3</button>
-                    <button class="key" data-value="4">4</button>
-                    <button class="key" data-value="5">5</button>
-                    <button class="key" data-value="6">6</button>
-                    <button class="key" data-value="7">7</button>
-                    <button class="key" data-value="8">8</button>
-                    <button class="key" data-value="9">9</button>
-                    <button class="key clear">C</button>
-                    <button class="key" data-value="0">0</button>
-                    <button class="key enter">↵</button>
-                </div>
+            <div class="login-form">
+                <input type="password" id="password-input" placeholder="Enter password..." maxlength="50">
+                <button id="login-btn">Login</button>
+                <div id="login-message" class="message"></div>
             </div>
 
             <div id="login-message" class="message"></div>
