@@ -88,7 +88,11 @@ class AbracadabraWebApp {
     }
 
     setupSocket() {
-        this.socket = io();
+        // Connect to the server (configurable via environment or default to current host)
+        const serverUrl = window.location.hostname === 'localhost' ?
+            'http://localhost:3000' :
+            window.location.origin;
+        this.socket = io(serverUrl);
 
         this.socket.on('connect', () => {
             console.log('Connected to server');
