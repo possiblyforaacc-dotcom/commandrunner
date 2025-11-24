@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abracadabra Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+</head>
+<body>
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <h1>🔮 Abracadabra</h1>
+            <p>Admin Panel Access</p>
+
+            <div class="keypad">
+                <div class="display">
+                    <input type="password" id="password-display" readonly>
+                </div>
+                <div class="keypad-buttons">
+                    <button class="key" data-value="1">1</button>
+                    <button class="key" data-value="2">2</button>
+                    <button class="key" data-value="3">3</button>
+                    <button class="key" data-value="4">4</button>
+                    <button class="key" data-value="5">5</button>
+                    <button class="key" data-value="6">6</button>
+                    <button class="key" data-value="7">7</button>
+                    <button class="key" data-value="8">8</button>
+                    <button class="key" data-value="9">9</button>
+                    <button class="key clear">C</button>
+                    <button class="key" data-value="0">0</button>
+                    <button class="key enter">↵</button>
+                </div>
+            </div>
+
+            <div id="login-message" class="message"></div>
+        </div>
+    </div>
+
+    <div id="admin-screen" class="screen">
+        <div class="admin-header">
+            <h1>🔮 Abracadabra Admin Panel</h1>
+            <div class="server-info">
+                <select id="server-select">
+                    <option value="">Select Server...</option>
+                </select>
+                <span id="connection-status">Disconnected</span>
+            </div>
+            <button id="logout-btn">Logout</button>
+        </div>
+
+        <div class="admin-content">
+            <div class="sidebar">
+                <div class="player-section">
+                    <h3>🎯 Target Player</h3>
+                    <div id="current-target">None selected</div>
+                    <button id="select-self-btn">Select Self</button>
+
+                    <h3>👥 Online Players</h3>
+                    <div id="player-list" class="player-list">
+                        <div class="loading">Loading players...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-panel">
+                <div class="category-tabs">
+                    <button class="tab active" data-category="main">Main Menu</button>
+                    <button class="tab" data-category="dupe">Dupe Items</button>
+                    <button class="tab" data-category="spawn">Spawn Items</button>
+                    <button class="tab" data-category="building">Building</button>
+                    <button class="tab" data-category="redstone">Redstone</button>
+                    <button class="tab" data-category="op">OP Items</button>
+                    <button class="tab" data-category="enchanted">Enchanted Books</button>
+                    <button class="tab" data-category="server">Server Commands</button>
+                    <button class="tab" data-category="world">World Management</button>
+                    <button class="tab" data-category="player">Player Tools</button>
+                    <button class="tab" data-category="creative">Creative Mode</button>
+                    <button class="tab" data-category="fun">Fun Commands</button>
+                    <button class="tab" data-category="troll">Troll Tools</button>
+                    <button class="tab" data-category="technical">Technical</button>
+                </div>
+
+                <div class="command-grid" id="command-grid">
+                    <!-- Commands will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="console">
+            <div class="console-header">
+                <h3>📜 Console Output</h3>
+                <button id="clear-console">Clear</button>
+            </div>
+            <div id="console-output" class="console-output"></div>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div id="confirm-dialog" class="dialog">
+        <div class="dialog-content">
+            <h3 id="confirm-title">Confirm Action</h3>
+            <p id="confirm-message">Are you sure you want to perform this action?</p>
+            <div class="dialog-buttons">
+                <button id="confirm-yes">Yes</button>
+                <button id="confirm-no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Amount Selector Dialog -->
+    <div id="amount-dialog" class="dialog">
+        <div class="dialog-content">
+            <h3 id="amount-title">Select Amount</h3>
+            <div class="amount-selector">
+                <button class="amount-btn" data-amount="1">1</button>
+                <button class="amount-btn" data-amount="8">8</button>
+                <button class="amount-btn" data-amount="16">16</button>
+                <button class="amount-btn" data-amount="32">32</button>
+                <button class="amount-btn" data-amount="64">64</button>
+                <input type="number" id="custom-amount" placeholder="Custom" min="1" max="2304">
+            </div>
+            <div class="dialog-buttons">
+                <button id="amount-confirm">Confirm</button>
+                <button id="amount-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
