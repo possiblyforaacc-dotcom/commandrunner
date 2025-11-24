@@ -62,6 +62,7 @@ class AbracadabraWebApp {
     setupKeypad() {
         const passwordInput = document.getElementById('password-input');
         const loginBtn = document.getElementById('login-btn');
+        const loginMessage = document.getElementById('login-message');
 
         // Handle login button click
         loginBtn.addEventListener('click', () => {
@@ -77,6 +78,36 @@ class AbracadabraWebApp {
 
         // Focus input on load
         passwordInput.focus();
+    }
+
+    async authenticate(password) {
+        const loginMessage = document.getElementById('login-message');
+
+        try {
+            const response = await fetch('/api/authenticate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                this.sessionId = data.sessionId;
+                loginMessage.textContent = 'Login successful!';
+                loginMessage.style.color = '#00ff00';
+                this.showAdminInterface();
+            } else {
+                loginMessage.textContent = data.message || 'Invalid password';
+                loginMessage.style.color = '#ff0000';
+            }
+        } catch (error) {
+            console.error('Authentication error:', error);
+            loginMessage.textContent = 'Connection error - is the server running?';
+            loginMessage.style.color = '#ff0000';
+        }
     }
 
     setupEventListeners() {
@@ -198,31 +229,7 @@ class AbracadabraWebApp {
         });
     }
 
-    authenticate(password) {
-        if (!password) return;
-
-        fetch('/api/authenticate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ password })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                this.sessionId = data.sessionId;
-                this.showAdminPanel();
-                this.loadServers();
-            } else {
-                this.showLoginMessage(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Authentication error:', error);
-            this.showLoginMessage('Invalid password', 'error');
-        });
-    }
+    // Remove duplicate authenticate method - using the HTTP version above
 
     showLoginMessage(message, type = 'info') {
         const messageEl = document.getElementById('login-message');
@@ -360,8 +367,32 @@ class AbracadabraWebApp {
             }
         }
 
-        // Send selection to server
-        this.executeCommand('select-player', { playerName });
+        // Send selection to server via HTTP
+        if (this.sessionId && this.selectedServer && playerName !== 'self') {
+            fetch('/api/select-player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sessionId: this.sessionId,
+                    serverId: this.selectedServer,
+                    playerName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.showConsoleMessage(`Selected player: ${playerName}`, 'success');
+                } else {
+                    this.showConsoleMessage(`Failed to select player: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Player selection error:', error);
+                this.showConsoleMessage('Failed to select player', 'error');
+            });
+        }
     }
 
     switchCategory(category) {
@@ -662,20 +693,37 @@ class AbracadabraWebApp {
         }
     }
 
-    executeCommand(command, params = {}) {
+    async executeCommand(command, params = {}) {
         if (!this.sessionId || !this.selectedServer) {
             this.showConsoleMessage('Not authenticated or no server selected', 'error');
             return;
         }
 
-        this.socket.emit('execute-command', {
-            serverId: this.selectedServer,
-            sessionId: this.sessionId,
-            command,
-            params
-        });
+        try {
+            const response = await fetch('/api/command', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sessionId: this.sessionId,
+                    serverId: this.selectedServer,
+                    command,
+                    params
+                })
+            });
 
-        this.showConsoleMessage(`Executing: ${command}`, 'info');
+            const data = await response.json();
+
+            if (data.success) {
+                this.showConsoleMessage(`Executed: ${command}`, 'success');
+            } else {
+                this.showConsoleMessage(`Failed: ${data.error}`, 'error');
+            }
+        } catch (error) {
+            console.error('Command execution error:', error);
+            this.showConsoleMessage('Command execution failed', 'error');
+        }
     }
 
     showConfirmDialog(title, message, callback) {
