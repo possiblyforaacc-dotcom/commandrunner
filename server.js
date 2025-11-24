@@ -210,7 +210,7 @@ app.post('/api/authenticate', (req, res) => {
     const { password } = req.body;
 
     // Simple password check (in production, use proper authentication)
-    const correctPassword = process.env.ADMIN_PASSWORD || '252622';
+    const correctPassword = process.env.ADMIN_PASSWORD || '12345';
 
     if (password === correctPassword) {
         const sessionId = generateSessionId();

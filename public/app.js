@@ -23,26 +23,45 @@ class AbracadabraWebApp {
     createGalaxyBackground() {
         const starsContainer = document.getElementById('stars');
 
-        // Create regular stars
-        for (let i = 0; i < 200; i++) {
+        // Create many more stars for richer detail
+        for (let i = 0; i < 800; i++) {
             const star = document.createElement('div');
             star.className = 'star';
+
+            // Random positioning
             star.style.left = Math.random() * 100 + '%';
             star.style.top = Math.random() * 100 + '%';
-            star.style.width = (Math.random() * 3 + 1) + 'px';
-            star.style.height = star.style.width;
-            star.style.animationDelay = Math.random() * 3 + 's';
+
+            // Varied sizes (tiny to medium)
+            const size = Math.random() * 4 + 0.5; // 0.5px to 4.5px
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+
+            // Random animation delays for natural twinkling
+            star.style.animationDelay = Math.random() * 5 + 's';
+
+            // Add some stars with different animation durations
+            if (Math.random() < 0.3) {
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's'; // 2-4 seconds
+            }
+
             starsContainer.appendChild(star);
         }
 
-        // Create shooting stars
+        // Create more frequent shooting stars
         setInterval(() => {
-            if (Math.random() < 0.1) { // 10% chance every interval
+            if (Math.random() < 0.15) { // 15% chance every interval
                 const shootingStar = document.createElement('div');
                 shootingStar.className = 'shooting-star';
                 shootingStar.style.left = Math.random() * 100 + '%';
-                shootingStar.style.top = Math.random() * 50 + '%';
-                shootingStar.style.animationDelay = Math.random() * 10 + 's';
+                shootingStar.style.top = Math.random() * 60 + '%'; // Higher chance in upper area
+                shootingStar.style.animationDelay = Math.random() * 5 + 's';
+
+                // Varied shooting star sizes
+                const starSize = Math.random() * 2 + 1; // 1-3px
+                shootingStar.style.width = starSize + 'px';
+                shootingStar.style.height = starSize + 'px';
+
                 starsContainer.appendChild(shootingStar);
 
                 // Remove shooting star after animation
@@ -50,9 +69,22 @@ class AbracadabraWebApp {
                     if (shootingStar.parentNode) {
                         shootingStar.parentNode.removeChild(shootingStar);
                     }
-                }, 3000);
+                }, 4000);
             }
-        }, 5000); // Check every 5 seconds
+        }, 3000); // Check every 3 seconds for more frequent shooting stars
+
+        // Create cosmic dust particles
+        for (let i = 0; i < 50; i++) {
+            const dust = document.createElement('div');
+            dust.className = 'cosmic-dust';
+            dust.style.left = Math.random() * 100 + '%';
+            dust.style.top = Math.random() * 100 + '%';
+            dust.style.width = (Math.random() * 2 + 1) + 'px';
+            dust.style.height = dust.style.width;
+            dust.style.animationDelay = Math.random() * 10 + 's';
+            dust.style.animationDuration = (Math.random() * 20 + 20) + 's'; // 20-40 seconds
+            starsContainer.appendChild(dust);
+        }
     }
 
     setupSocket() {
@@ -219,7 +251,7 @@ class AbracadabraWebApp {
         })
         .catch(error => {
             console.error('Authentication error:', error);
-            this.showLoginMessage('Connection failed', 'error');
+            this.showLoginMessage('Invalid password', 'error');
         });
     }
 
